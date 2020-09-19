@@ -57,7 +57,7 @@ export class ErrorInterceptor implements HttpInterceptor {
         this.storage.setLocalUser(null);
     }
 
-    handleDefaultEror(errorObj) {
+    handleDefaultEror(errorObj: { status: string; error: string; message: any; }) {
         let alert = this.alertCtrl.create({
             title: 'Erro ' + errorObj.status + ': ' + errorObj.error,
             message: errorObj.message,
