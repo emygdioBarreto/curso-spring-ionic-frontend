@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { CidadeService } from '../../services/domain/cidade.service';
 import { EstadoService } from '../../services/domain/estado.service';
 import { EstadoDTO } from '../../models/estado.dto';
 import { CidadeDTO } from '../../models/cidade.dto';
+import { ClienteService } from '../../services/domain/cliente.service';
 
 @IonicPage()
 @Component({
@@ -22,19 +23,21 @@ export class SignupPage {
     public navParams: NavParams,
     public formBuilder: FormBuilder,
     public cidadeService: CidadeService,
-    public estadoService: EstadoService) {
+    public estadoService: EstadoService,
+    public clienteService: ClienteService,
+    public alertCtlr: AlertController) {
       this.formGroup = this.formBuilder.group({
-        nome: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(120)]],
-        email: ['', [Validators.required, Validators.email]],
+        nome: ['Joaquim', [Validators.required, Validators.minLength(5), Validators.maxLength(120)]],
+        email: ['joaquim@gmail.com', [Validators.required, Validators.email]],
         tipo: ['1', [Validators.required]],
-        cpfOuCnpj: ['', [Validators.required, Validators.minLength(11), Validators.maxLength(14)]],
-        senha: ['', [Validators.required]],
-        logradouro: ['', [Validators.required]],
-        numero: ['', [Validators.required]],
+        cpfOuCnpj: ['64467051074', [Validators.required, Validators.minLength(11), Validators.maxLength(14)]],
+        senha: ['123', [Validators.required]],
+        logradouro: ['Rua do Joaquim', [Validators.required]],
+        numero: ['S/N', [Validators.required]],
         complemento: ['', []],
         bairro: ['', []],
-        cep: ['', [Validators.required]],
-        telefone1: ['', [Validators.required]],
+        cep: ['50100180', [Validators.required]],
+        telefone1: ['22224444', [Validators.required]],
         telefone2: ['', []],
         telefone3: ['', []],
         estadoId: [null, [Validators.required]],
@@ -59,11 +62,31 @@ export class SignupPage {
         this.cidades = Response;
         this.formGroup.controls.cidadeId.setValue(null);
       },
-      error => {})
+      error => {});
   }
 
   signupUser() {
-    console.log("enviou o form")
+    this.clienteService.insert(this.formGroup.value)
+      .subscribe(Response => {
+        this.showInsertOk();
+      },
+      error => {});
   }
 
+  showInsertOk() {
+    let alert = this.alertCtlr.create({
+      title: 'Sucesso!',
+      message: 'Cadastro efetuado com sucesso',
+      enableBackdropDismiss: false,
+      buttons: [
+        {
+          text: 'Ok',
+          handler: () => {
+            this.navCtrl.pop();
+          }
+        }
+      ]
+    });
+    alert.present();
+  }
 }
