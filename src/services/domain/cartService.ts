@@ -1,5 +1,4 @@
 import { Injectable } from "@angular/core";
-import { Item } from "ionic-angular";
 import { Cart } from "../../models/cart";
 import { ProdutoDTO } from "../../models/produto.dto";
 import { StorageService } from "../storage.service";
