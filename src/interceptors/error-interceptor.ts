@@ -18,7 +18,7 @@ export class ErrorInterceptor implements HttpInterceptor {
             if (errorObj.error) {
                 errorObj = errorObj.error;
             }
-            if (errorObj.status) {
+            if (!errorObj.status) {
                 errorObj = JSON.parse(errorObj);
             }
 
